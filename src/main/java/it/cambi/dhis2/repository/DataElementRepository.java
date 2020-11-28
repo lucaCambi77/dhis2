@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,7 @@ public class DataElementRepository extends AbstractRepository {
                             getHttpEntityRequest(dhis2Username, dhis2Password),
                             DataElementWrap.class))
                 .getBody())
-        .orElse(DataElementWrap.builder().build())
+        .orElse(DataElementWrap.builder().dataElements(Collections.emptyList()).build())
         .getDataElements();
   }
 
@@ -64,7 +65,7 @@ public class DataElementRepository extends AbstractRepository {
                             getHttpEntityRequest(dhis2Username, dhis2Password),
                             DataElementGroupWrap.class))
                 .getBody())
-        .orElse(DataElementGroupWrap.builder().build())
+        .orElse(DataElementGroupWrap.builder().dataElementGroups(Collections.emptyList()).build())
         .getDataElementGroups();
   }
 
