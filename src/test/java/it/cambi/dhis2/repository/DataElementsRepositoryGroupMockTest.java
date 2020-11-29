@@ -5,7 +5,6 @@ import it.cambi.dhis2.exception.Dhis2RestClientException;
 import it.cambi.dhis2.model.BaseDataElement;
 import it.cambi.dhis2.model.DataElementGroup;
 import it.cambi.dhis2.model.DataElementGroupWrap;
-import it.cambi.dhis2.model.DataElementWrap;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class DataElementsRepositoryGroupMockTest {
   private static String dataElementGroupId = "dataElementGroupId";
 
   @Test
-  public void shouldGetDataElementGroups() {
+  public void shouldExecuteRestTemplateAndGetDataElementGroups() {
     ArgumentCaptor<String> argumentUrl = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<HttpMethod> httpMethod = ArgumentCaptor.forClass(HttpMethod.class);
     ArgumentCaptor<Class<DataElementGroupWrap>> clazz = ArgumentCaptor.forClass(Class.class);

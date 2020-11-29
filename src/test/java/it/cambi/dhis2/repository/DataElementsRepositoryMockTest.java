@@ -43,7 +43,7 @@ public class DataElementsRepositoryMockTest {
   private static String dataElementGroupId = "dataElementGroupId";
 
   @Test
-  public void shouldGetDataElements() {
+  public void shouldExecuteRestTemplateAndGetDataElements() {
     ArgumentCaptor<String> argumentUrl = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<HttpMethod> httpMethod = ArgumentCaptor.forClass(HttpMethod.class);
     ArgumentCaptor<Class<DataElementWrap>> clazz = ArgumentCaptor.forClass(Class.class);
