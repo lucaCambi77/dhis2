@@ -4,6 +4,10 @@ plugins {
     id 'java'
 }
 
+plugins {
+    id 'jacoco'
+}
+
 group = 'it.cambi'
 version = '0.0.1'
 sourceCompatibility = '11'
@@ -41,11 +45,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'com.github.kstyrc:embedded-redis:0.6'
-
 }
 
 test {
     useJUnitPlatform()
+
+    finalizedBy jacocoTestReport
 
     testLogging {
         events "started", "passed", "skipped", "failed"
