@@ -24,12 +24,16 @@ git clone git@github.com:lucaCambi77/dhis2.git
 
 ## Run application
 
+Redis cache needs to be up as it is used by the application
+
 * Start Redis cache
 ```bash
 docker-compose up -d
 ```
 
-Start spring boot application
+We can then start our application 
+
+* Start spring boot application
 ```bash
 ./gradlew bootRun
 ```
@@ -39,6 +43,24 @@ Start spring boot application
 ```bash
 docker-compose down
 ```
+
+## Authentication
+
+In memory authentication is in place for spring security with Basic Authentication
+
+There is only one user:
+
+user : *dhis2*
+
+password : *dhis2*
+
+## Tests
+
+Embedded Redis cache is in use for tests
+
+Execution of tests is in build/reports/
+
+In jacoco folder we can also find code coverage in html format
 
 ## Documentation : 
 
