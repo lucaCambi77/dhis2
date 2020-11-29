@@ -1,4 +1,4 @@
-package it.cambi.dhis2.config;
+package it.cambi.dhis2.cache;
 
 import it.cambi.dhis2.model.cache.RedisProperties;
 import lombok.RequiredArgsConstructor;
