@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.Date;
 
@@ -36,9 +37,9 @@ public class Dhis2ControllerAdvice {
       Dhis2RestClientException restClientException) {
     HttpStatus httpStatus;
     String exceptionMessage;
-    if (restClientException.getCause() instanceof HttpClientErrorException) {
-      HttpClientErrorException httpClientErrorException =
-          (HttpClientErrorException) restClientException.getCause();
+    if (restClientException.getCause() instanceof HttpServerErrorException) {
+      HttpServerErrorException httpClientErrorException =
+          (HttpServerErrorException) restClientException.getCause();
       httpStatus = httpClientErrorException.getStatusCode();
       exceptionMessage = httpClientErrorException.getMessage();
     } else if (restClientException.getCause() instanceof HttpClientErrorException) {

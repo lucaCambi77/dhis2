@@ -6,8 +6,8 @@ import it.cambi.dhis2.dto.DataElementsDto;
 import it.cambi.dhis2.service.DataElementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,9 +20,8 @@ public class Dhis2Controller {
   private final DataElementService dataElementService;
 
   @ApiOperation(value = "Get Data Elements type from DHIS2", response = DataElementsDto[].class)
-  @RequestMapping(
+  @GetMapping(
       value = "/dataElements",
-      method = RequestMethod.GET,
       produces = {MediaType.APPLICATION_JSON_VALUE})
   public List<DataElementsDto> getDataElements() {
     return dataElementService.getDataElements();
@@ -31,9 +30,8 @@ public class Dhis2Controller {
   @ApiOperation(
       value = "Get Data Element Groups type from DHIS2",
       response = DataElementGroupsDto[].class)
-  @RequestMapping(
+  @GetMapping(
       value = "/dataElementGroups",
-      method = RequestMethod.GET,
       produces = {MediaType.APPLICATION_JSON_VALUE})
   public List<DataElementGroupsDto> getDataElementGroups() {
     return dataElementService.getDataElementGroups();

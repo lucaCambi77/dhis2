@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
@@ -40,16 +42,12 @@ public class Dhis2Application {
 
   @Bean
   public HttpEntity<String> getDefaultHttpEntityRequest() {
-    HttpHeaders httpHeaders =
-        new HttpHeaders() {
-          {
-            String auth = dhis2Username + ":" + dhis2Password;
-            byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.US_ASCII));
-            String authHeader = "Basic " + new String(encodedAuth);
-            set("Authorization", authHeader);
-          }
-        };
 
-    return new HttpEntity<>(httpHeaders);
+    String auth = dhis2Username + ":" + dhis2Password;
+    byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.US_ASCII));
+    MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+    headers.set("Authorization", "Basic " + new String(encodedAuth));
+
+    return new HttpEntity<>(new HttpHeaders(headers));
   }
 }

@@ -38,7 +38,7 @@ public class CacheConfig {
   private final RedisProperties redisProperties;
 
   @Bean
-  public RedisTemplate<?, ?> getRedisTemplate() {
+  public RedisTemplate<byte[], byte[]> getRedisTemplate() {
     RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
     template.setConnectionFactory(jedisConnectionFactory());
     return template;
