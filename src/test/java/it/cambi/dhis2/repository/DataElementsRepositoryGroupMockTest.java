@@ -5,6 +5,7 @@ import it.cambi.dhis2.exception.Dhis2RestClientException;
 import it.cambi.dhis2.model.BaseDataElement;
 import it.cambi.dhis2.model.DataElementGroup;
 import it.cambi.dhis2.model.DataElementGroupWrap;
+import it.cambi.dhis2.model.DataElementWrap;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
@@ -44,10 +46,16 @@ public class DataElementsRepositoryGroupMockTest {
   @Test
   public void shouldGetDataElementGroups() {
     ArgumentCaptor<String> argumentUrl = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<HttpMethod> httpMethod = ArgumentCaptor.forClass(HttpMethod.class);
+    ArgumentCaptor<Class<DataElementGroupWrap>> clazz = ArgumentCaptor.forClass(Class.class);
     ArgumentCaptor<HttpEntity<String>> httpEntity = ArgumentCaptor.forClass(HttpEntity.class);
 
     when(restTemplate.exchange(
-            argumentUrl.capture(), any(), httpEntity.capture(), any(Class.class), (Object) any()))
+            argumentUrl.capture(),
+            httpMethod.capture(),
+            httpEntity.capture(),
+            clazz.capture(),
+            (Object) any()))
         .thenReturn(
             ResponseEntity.status(HttpStatus.OK)
                 .body(
@@ -68,6 +76,8 @@ public class DataElementsRepositoryGroupMockTest {
     assertEquals(1, dataElementList.size());
 
     assertTrue(argumentUrl.getValue().contains(dhis2ApiDataElementGroups));
+    assertEquals(HttpMethod.GET, httpMethod.getValue());
+    assertTrue(clazz.getValue().isAssignableFrom(DataElementGroupWrap.class));
     assertNotNull(httpEntity.getValue().getHeaders().get("Authorization"));
   }
 
@@ -84,8 +94,11 @@ public class DataElementsRepositoryGroupMockTest {
   @Test
   public void shouldThrowWhenDataElementGroupThrows() {
     when(restTemplate.exchange(anyString(), any(), any(), any(Class.class), (Object) any()))
-            .thenThrow(new RestClientException("Rest client exception"));
+        .thenThrow(new RestClientException("Rest client exception"));
 
-    assertThrows(Dhis2RestClientException.class, () ->  dataElementRepository.getDataElementGroups(), "Should throw when rest client exception");
+    assertThrows(
+        Dhis2RestClientException.class,
+        () -> dataElementRepository.getDataElementGroups(),
+        "Should throw when rest client exception");
   }
 }

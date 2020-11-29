@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
@@ -44,10 +45,16 @@ public class DataElementsRepositoryMockTest {
   @Test
   public void shouldGetDataElements() {
     ArgumentCaptor<String> argumentUrl = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<HttpMethod> httpMethod = ArgumentCaptor.forClass(HttpMethod.class);
+    ArgumentCaptor<Class<DataElementWrap>> clazz = ArgumentCaptor.forClass(Class.class);
     ArgumentCaptor<HttpEntity<String>> httpEntity = ArgumentCaptor.forClass(HttpEntity.class);
 
     when(restTemplate.exchange(
-            argumentUrl.capture(), any(), httpEntity.capture(), any(Class.class), (Object) any()))
+            argumentUrl.capture(),
+            httpMethod.capture(),
+            httpEntity.capture(),
+            clazz.capture(),
+            (Object) any()))
         .thenReturn(
             ResponseEntity.status(HttpStatus.OK)
                 .body(
@@ -70,6 +77,8 @@ public class DataElementsRepositoryMockTest {
     assertEquals(1, dataElementList.size());
 
     assertTrue(argumentUrl.getValue().contains(dhis2ApiDataElements));
+    assertEquals(HttpMethod.GET, httpMethod.getValue());
+    assertTrue(clazz.getValue().isAssignableFrom(DataElementWrap.class));
     assertNotNull(httpEntity.getValue().getHeaders().get("Authorization"));
   }
 
@@ -86,8 +95,11 @@ public class DataElementsRepositoryMockTest {
   @Test
   public void shouldThrowWhenDataElementThrows() {
     when(restTemplate.exchange(anyString(), any(), any(), any(Class.class), (Object) any()))
-            .thenThrow(new RestClientException("Rest client exception"));
+        .thenThrow(new RestClientException("Rest client exception"));
 
-    assertThrows(Dhis2RestClientException.class, () ->  dataElementRepository.getDataElements(), "Should throw when rest client exception");
+    assertThrows(
+        Dhis2RestClientException.class,
+        () -> dataElementRepository.getDataElements(),
+        "Should throw when rest client exception");
   }
 }
