@@ -12,7 +12,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.util.Date;
 
 @ControllerAdvice
-public class TrueLayerControllerAdvice {
+public class Dhis2ControllerAdvice {
 
   @ExceptionHandler(IllegalArgumentException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
