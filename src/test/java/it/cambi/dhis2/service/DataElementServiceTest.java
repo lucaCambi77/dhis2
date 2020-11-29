@@ -1,5 +1,6 @@
 package it.cambi.dhis2.service;
 
+import it.cambi.dhis2.AbstractTest;
 import it.cambi.dhis2.dto.DataElementGroupsDto;
 import it.cambi.dhis2.dto.DataElementsDto;
 import it.cambi.dhis2.model.BaseDataElement;
@@ -21,15 +22,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DataElementServiceTest {
+public class DataElementServiceTest extends AbstractTest {
 
   @InjectMocks private DataElementService dataElementService;
 
   @Mock private DataElementRepository dataElementRepository;
-
-  private static String dataElementId = "dataElementId";
-  private static String dataElementDisplayName = "displayName";
-  private static String dataElementGroupId = "dataElementGroupId";
 
   @Test
   public void shouldCallRepositoryAndGetGroupElements() {
@@ -54,15 +51,15 @@ public class DataElementServiceTest {
   @Test
   public void shouldCallRepositoryAndGetElementGroups() {
     when(dataElementRepository.getDataElementGroups())
-            .thenReturn(
-                    Collections.singletonList(
-                            DataElementGroup.builder()
-                                    .id(dataElementGroupId)
-                                    .displayName(dataElementDisplayName)
-                                    .dataElements(
-                                            Collections.singletonList(
-                                                    BaseDataElement.builder().id(dataElementId).build()))
-                                    .build()));
+        .thenReturn(
+            Collections.singletonList(
+                DataElementGroup.builder()
+                    .id(dataElementGroupId)
+                    .displayName(dataElementDisplayName)
+                    .dataElements(
+                        Collections.singletonList(
+                            BaseDataElement.builder().id(dataElementId).build()))
+                    .build()));
 
     List<DataElementGroupsDto> dataElementsDto = dataElementService.getDataElementGroups();
 

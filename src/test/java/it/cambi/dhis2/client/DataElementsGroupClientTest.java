@@ -1,5 +1,6 @@
 package it.cambi.dhis2.client;
 
+import it.cambi.dhis2.AbstractTest;
 import it.cambi.dhis2.model.BaseDataElement;
 import it.cambi.dhis2.model.DataElementGroup;
 import it.cambi.dhis2.repository.DataElementRepository;
@@ -18,14 +19,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DataElementsGroupClientTest {
+public class DataElementsGroupClientTest extends AbstractTest {
 
   @InjectMocks private DataElementClient dataElementClient;
   @Mock private DataElementRepository dataElementRepository;
-
-  private static String dataElementGroupId = "dataElementGroupId";
-  private static String dataElementGroupDisplayName = "displayName";
-  private static String dataElementId = "dataElementId";
 
   @Test
   public void shouldGetDataElements() {

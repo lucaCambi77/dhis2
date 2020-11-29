@@ -1,5 +1,6 @@
 package it.cambi.dhis2.repository;
 
+import it.cambi.dhis2.AbstractTest;
 import it.cambi.dhis2.Dhis2Application;
 import it.cambi.dhis2.exception.Dhis2RestClientException;
 import it.cambi.dhis2.model.BaseDataElement;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(
     classes = Dhis2Application.class,
     properties = {"spring.redis.embedded=true"})
-public class DataElementsRepositoryGroupMockTest {
+public class DataElementsRepositoryGroupMockTest extends AbstractTest {
 
   @Autowired private DataElementRepository dataElementRepository;
 
@@ -37,10 +38,6 @@ public class DataElementsRepositoryGroupMockTest {
 
   @Value("${dhis2.api.data.elements.group}")
   private String dhis2ApiDataElementGroups;
-
-  private static String dataElementId = "dataElementId";
-  private static String dataElementDisplayName = "displayName";
-  private static String dataElementGroupId = "dataElementGroupId";
 
   @Test
   public void shouldExecuteRestTemplateAndGetDataElementGroups() {

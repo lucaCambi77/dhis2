@@ -1,5 +1,6 @@
 package it.cambi.dhis2.cache;
 
+import it.cambi.dhis2.AbstractTest;
 import it.cambi.dhis2.EmbeddedRedisConfig;
 import it.cambi.dhis2.controller.v1.Dhis2Controller;
 import it.cambi.dhis2.dto.DataElementGroupsDto;
@@ -27,11 +28,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(
     classes = {EmbeddedRedisConfig.class},
     properties = {"spring.redis.embedded=true"})
-public class Dhis2ServiceCacheTest {
-
-  private static String dataElementId = "dataElementId";
-  private static String dataElementDisplayName = "displayName";
-  private static String dataElementGroupId = "dataElementGroupId";
+public class Dhis2ServiceCacheTest extends AbstractTest {
 
   @Autowired private Dhis2Controller dhis2Controller;
   @Autowired private CacheManager cacheManager;

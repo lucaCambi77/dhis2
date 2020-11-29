@@ -1,5 +1,6 @@
 package it.cambi.dhis2.controller;
 
+import it.cambi.dhis2.AbstractTest;
 import it.cambi.dhis2.Dhis2Application;
 import it.cambi.dhis2.dto.DataElementGroupsDto;
 import it.cambi.dhis2.dto.DataElementsDto;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     classes = Dhis2Application.class,
     properties = {"spring.redis.embedded=true"})
 @AutoConfigureMockMvc
-public class Dhis2ControllerTest {
+public class Dhis2ControllerTest extends AbstractTest {
 
   @Autowired private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
@@ -39,10 +40,6 @@ public class Dhis2ControllerTest {
   @MockBean private DataElementService dataElementService;
 
   private final MediaType mediaType = MediaType.APPLICATION_JSON;
-
-  private static String dataElementId = "dataElementId";
-  private static String dataElementDisplayName = "displayName";
-  private static String dataElementGroupId = "dataElementGroupId";
 
   @Value("${dhis2.api.username}")
   private String dhis2Username;

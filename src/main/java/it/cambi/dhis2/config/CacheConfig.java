@@ -2,7 +2,6 @@ package it.cambi.dhis2.config;
 
 import it.cambi.dhis2.model.cache.RedisProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
