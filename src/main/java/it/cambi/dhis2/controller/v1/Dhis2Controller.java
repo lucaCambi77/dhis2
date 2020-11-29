@@ -1,5 +1,6 @@
 package it.cambi.dhis2.controller.v1;
 
+import io.swagger.annotations.ApiOperation;
 import it.cambi.dhis2.dto.DataElementGroupsDto;
 import it.cambi.dhis2.dto.DataElementsDto;
 import it.cambi.dhis2.service.DataElementService;
@@ -18,6 +19,7 @@ public class Dhis2Controller {
 
   private final DataElementService dataElementService;
 
+  @ApiOperation(value = "Get Data Elements type from DHIS2", response = DataElementsDto[].class)
   @RequestMapping(
       value = "/dataElements",
       method = RequestMethod.GET,
@@ -26,6 +28,9 @@ public class Dhis2Controller {
     return dataElementService.getDataElements();
   }
 
+  @ApiOperation(
+      value = "Get Data Element Groups type from DHIS2",
+      response = DataElementGroupsDto[].class)
   @RequestMapping(
       value = "/dataElementGroups",
       method = RequestMethod.GET,
