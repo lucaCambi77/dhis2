@@ -18,5 +18,5 @@ public abstract class AbstractTest {
   @Captor protected ArgumentCaptor<Class<DataElementGroupWrap>> clazzDataElementGroupsCaptor;
   @Captor protected ArgumentCaptor<String> argumentUrlCaptor;
   @Captor protected ArgumentCaptor<HttpMethod> httpMethodCaptor;
-  @Captor protected ArgumentCaptor<HttpEntity> httpEntityCaptor;
+  @Captor protected ArgumentCaptor<HttpEntity<String>> httpEntityCaptor;
 }
