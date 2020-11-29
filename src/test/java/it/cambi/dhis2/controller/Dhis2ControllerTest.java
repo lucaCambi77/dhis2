@@ -4,6 +4,7 @@ import it.cambi.dhis2.AbstractTest;
 import it.cambi.dhis2.Dhis2Application;
 import it.cambi.dhis2.dto.DataElementGroupsDto;
 import it.cambi.dhis2.dto.DataElementsDto;
+import it.cambi.dhis2.exception.Dhis2RestClientException;
 import it.cambi.dhis2.service.DataElementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,15 +13,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -104,5 +109,66 @@ public class Dhis2ControllerTest extends AbstractTest {
         .andExpect(jsonPath("$.[0].members", hasSize(1)))
         .andExpect(jsonPath("$.[0].members[0]").value(dataElementId))
         .andReturn();
+  }
+
+  @Test
+  public void shouldGetNotAuthorizedWhenCredentialNotProvided() throws Exception {
+
+    mockMvc
+        .perform(get("/dhis2/v1/api/dataElements").contentType(mediaType))
+        .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
+        .andReturn();
+    verify(dataElementService, times(0)).getDataElements();
+  }
+
+  @Test
+  public void shouldGetInternalServerErrorHttpServerException() throws Exception {
+
+    when(dataElementService.getDataElements())
+        .thenThrow(
+            new Dhis2RestClientException(
+                new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE)));
+
+    mockMvc
+        .perform(
+            get("/dhis2/v1/api/dataElements")
+                .contentType(mediaType)
+                .with(httpBasic(dhis2Username, dhis2Password)))
+        .andExpect(status().is5xxServerError())
+        .andReturn();
+    verify(dataElementService).getDataElements();
+  }
+
+  @Test
+  public void shouldGetInternalClientErrorHttpServerException() throws Exception {
+
+    when(dataElementService.getDataElements())
+        .thenThrow(
+            new Dhis2RestClientException(new HttpClientErrorException(HttpStatus.BAD_REQUEST)));
+
+    mockMvc
+        .perform(
+            get("/dhis2/v1/api/dataElements")
+                .contentType(mediaType)
+                .with(httpBasic(dhis2Username, dhis2Password)))
+        .andExpect(status().is4xxClientError())
+        .andReturn();
+    verify(dataElementService).getDataElements();
+  }
+
+  @Test
+  public void shouldGetInternalServerErrorRestClientException() throws Exception {
+
+    when(dataElementService.getDataElements())
+        .thenThrow(new Dhis2RestClientException(new RestClientException("Some rest client error")));
+
+    mockMvc
+        .perform(
+            get("/dhis2/v1/api/dataElements")
+                .contentType(mediaType)
+                .with(httpBasic(dhis2Username, dhis2Password)))
+        .andExpect(status().isInternalServerError())
+        .andReturn();
+    verify(dataElementService).getDataElements();
   }
 }
