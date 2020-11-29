@@ -76,3 +76,14 @@ http://localhost:5000/swagger-ui.html#/
 ./gradlew clean build       // unvalidate cache and build
 
 ```
+
+## Sonarqube
+
+We need to have sonarqube installed [see](https://docs.sonarqube.org/latest/)
+
+After executing test we can create a sonarqube report with
+```
+./gradlew build jacocoTestReport sonarqube
+```
+
+In build/sonar we can check results for our task

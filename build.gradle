@@ -6,7 +6,7 @@ plugins {
 
 plugins {
     id 'jacoco'
-    id "org.sonarqube" version "2.7.1"
+    id "org.sonarqube" version "3.0"
 }
 
 group = 'it.cambi'
@@ -45,6 +45,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'com.github.kstyrc:embedded-redis:0.6'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
 
 test {
