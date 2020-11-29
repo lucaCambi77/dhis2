@@ -24,21 +24,17 @@ git clone git@github.com:lucaCambi77/dhis2.git
 
 ## Run application
 
-Redis cache needs to be up as it is used by the application
+* Build Docker image
+```bash
+docker build -t dhis2 .
+```
 
-* Start Redis cache
+* Start Application
 ```bash
 docker-compose up -d
 ```
 
-We can then start our application 
-
-* Start spring boot application
-```bash
-./gradlew bootRun
-```
-
-## Stop docker
+## Stop application
 
 ```bash
 docker-compose down
