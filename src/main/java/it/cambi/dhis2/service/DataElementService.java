@@ -5,6 +5,7 @@ import it.cambi.dhis2.dto.DataElementsDto;
 import it.cambi.dhis2.model.BaseDataElement;
 import it.cambi.dhis2.repository.DataElementRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class DataElementService {
 
   private final DataElementRepository dataElementRepository;
 
+  @Cacheable(value = "dataElementsCache", sync = true)
   public List<DataElementsDto> getDataElements() {
 
     return dataElementRepository.getDataElements().stream()
@@ -32,6 +34,7 @@ public class DataElementService {
         .collect(Collectors.toList());
   }
 
+  @Cacheable(value = "dataElementGroupsCache", sync = true)
   public List<DataElementGroupsDto> getDataElementGroups() {
 
     return dataElementRepository.getDataElementGroups().stream()

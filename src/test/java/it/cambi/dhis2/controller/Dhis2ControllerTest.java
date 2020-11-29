@@ -27,7 +27,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = {Dhis2Application.class})
+@SpringBootTest(
+    classes = Dhis2Application.class,
+    properties = {"spring.redis.embedded=true"})
 @AutoConfigureMockMvc
 public class Dhis2ControllerTest {
 
