@@ -5,15 +5,12 @@ import it.cambi.dhis2.model.DataElementGroup;
 import it.cambi.dhis2.model.DataElementGroupWrap;
 import it.cambi.dhis2.model.DataElementWrap;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +21,8 @@ public class DataElementRepository extends AbstractRepository {
 
   private final RestTemplate restTemplate;
 
+  private final HttpEntity<String> defaultHttpEntityRequest;
+
   @Value("${dhis2.url}")
   private String dhis2Url;
 
@@ -33,12 +32,6 @@ public class DataElementRepository extends AbstractRepository {
   @Value("${dhis2.api.data.elements.group}")
   private String dhis2ApiDataElementGroups;
 
-  @Value("${dhis2.username}")
-  private String dhis2Username;
-
-  @Value("${dhis2.password}")
-  private String dhis2Password;
-
   public List<DataElement> getDataElements() {
 
     return Optional.ofNullable(
@@ -47,7 +40,7 @@ public class DataElementRepository extends AbstractRepository {
                         restTemplate.exchange(
                             dhis2Url + dhis2ApiDataElements,
                             HttpMethod.GET,
-                            getHttpEntityRequest(dhis2Username, dhis2Password),
+                            defaultHttpEntityRequest,
                             DataElementWrap.class))
                 .getBody())
         .orElse(DataElementWrap.builder().dataElements(Collections.emptyList()).build())
@@ -62,24 +55,10 @@ public class DataElementRepository extends AbstractRepository {
                         restTemplate.exchange(
                             dhis2Url + dhis2ApiDataElementGroups,
                             HttpMethod.GET,
-                            getHttpEntityRequest(dhis2Username, dhis2Password),
+                            defaultHttpEntityRequest,
                             DataElementGroupWrap.class))
                 .getBody())
         .orElse(DataElementGroupWrap.builder().dataElementGroups(Collections.emptyList()).build())
         .getDataElementGroups();
-  }
-
-  private HttpEntity<String> getHttpEntityRequest(String username, String password) {
-    HttpHeaders httpHeaders =
-        new HttpHeaders() {
-          {
-            String auth = username + ":" + password;
-            byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.US_ASCII));
-            String authHeader = "Basic " + new String(encodedAuth);
-            set("Authorization", authHeader);
-          }
-        };
-
-    return new HttpEntity<>(httpHeaders);
   }
 }

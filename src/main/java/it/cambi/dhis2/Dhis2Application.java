@@ -2,27 +2,54 @@ package it.cambi.dhis2;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
+
+import java.nio.charset.StandardCharsets;
 
 @SpringBootApplication
 public class Dhis2Application {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Dhis2Application.class, args);
-	}
+  @Value("${dhis2.username}")
+  private String dhis2Username;
 
-	@Bean
-	public RestTemplate getRestTemplate() {
+  @Value("${dhis2.password}")
+  private String dhis2Password;
 
-		return new RestTemplate();
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(Dhis2Application.class, args);
+  }
 
-	@Bean
-	public ObjectMapper getObjectMapper() {
+  @Bean
+  public RestTemplate getRestTemplate() {
 
-		return new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	}
+    return new RestTemplate();
+  }
+
+  @Bean
+  public ObjectMapper getObjectMapper() {
+
+    return new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  }
+
+  @Bean
+  public HttpEntity<String> getDefaultHttpEntityRequest() {
+    HttpHeaders httpHeaders =
+        new HttpHeaders() {
+          {
+            String auth = dhis2Username + ":" + dhis2Password;
+            byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.US_ASCII));
+            String authHeader = "Basic " + new String(encodedAuth);
+            set("Authorization", authHeader);
+          }
+        };
+
+    return new HttpEntity<>(httpHeaders);
+  }
 }
