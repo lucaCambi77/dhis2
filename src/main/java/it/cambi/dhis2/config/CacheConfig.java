@@ -2,6 +2,7 @@ package it.cambi.dhis2.config;
 
 import it.cambi.dhis2.model.cache.RedisProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -11,9 +12,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -26,6 +26,7 @@ import java.util.Map;
 @EnableCaching
 @Import(value = RedisPropertiesConfig.class)
 @RequiredArgsConstructor
+@Slf4j
 public class CacheConfig {
 
   @Value("${dhis2.dataElementsCache}")
@@ -39,19 +40,22 @@ public class CacheConfig {
   @Bean
   public RedisTemplate<?, ?> getRedisTemplate() {
     RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
-    template.setConnectionFactory(getRedisConnectionFactory());
+    template.setConnectionFactory(jedisConnectionFactory());
     return template;
   }
 
   @Bean
-  public LettuceConnectionFactory getRedisConnectionFactory() {
-    RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+  JedisConnectionFactory jedisConnectionFactory() {
+    log.info(
+        "Redis start at "
+            + redisProperties.getRedisHost()
+            + ", port "
+            + redisProperties.getRedisPort());
 
-    redisStandaloneConfiguration.setHostName(redisProperties.getRedisHost());
-    redisStandaloneConfiguration.setPort(redisProperties.getRedisPort());
-    redisStandaloneConfiguration.setPassword(RedisPassword.of(redisProperties.getRedisPassword()));
-
-    return new LettuceConnectionFactory(redisStandaloneConfiguration);
+    RedisStandaloneConfiguration redisStandaloneConfiguration =
+        new RedisStandaloneConfiguration(
+            redisProperties.getRedisHost(), redisProperties.getRedisPort());
+    return new JedisConnectionFactory(redisStandaloneConfiguration);
   }
 
   @Bean
