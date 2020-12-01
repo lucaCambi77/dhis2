@@ -134,7 +134,7 @@ public class Dhis2ControllerTest extends AbstractTest {
             get("/dhis2/v1/api/dataElements")
                 .contentType(mediaType)
                 .with(httpBasic(dhis2Username, dhis2Password)))
-        .andExpect(status().is5xxServerError())
+        .andExpect(status().isServiceUnavailable())
         .andReturn();
     verify(dataElementService).getDataElements();
   }
