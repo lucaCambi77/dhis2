@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DataElementsClientTest extends AbstractTest {
+class DataElementsClientTest extends AbstractTest {
 
   @InjectMocks private DataElementClient dataElementClient;
   @Mock private DataElementRepository dataElementRepository;

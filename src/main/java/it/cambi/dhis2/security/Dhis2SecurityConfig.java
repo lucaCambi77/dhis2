@@ -1,4 +1,4 @@
-package it.cambi.dhis2.secutiry;
+package it.cambi.dhis2.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

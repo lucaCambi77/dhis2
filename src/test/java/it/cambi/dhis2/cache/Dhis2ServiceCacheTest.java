@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(
     classes = {EmbeddedRedisConfig.class},
     properties = {"spring.redis.embedded=true"})
-public class Dhis2ServiceCacheTest extends AbstractTest {
+class Dhis2ServiceCacheTest extends AbstractTest {
 
   @Autowired private Dhis2Controller dhis2Controller;
   @Autowired private CacheManager cacheManager;

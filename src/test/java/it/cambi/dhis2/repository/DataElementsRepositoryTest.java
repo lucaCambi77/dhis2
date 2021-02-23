@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(
     classes = Dhis2Application.class,
     properties = {"spring.redis.embedded=true"})
-public class DataElementsRepositoryTest {
+class DataElementsRepositoryTest {
 
   @Autowired private DataElementRepository dataElementRepository;
 

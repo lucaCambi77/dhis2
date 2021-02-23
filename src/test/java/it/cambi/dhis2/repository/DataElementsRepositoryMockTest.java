@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(
     classes = Dhis2Application.class,
     properties = {"spring.redis.embedded=true"})
-public class DataElementsRepositoryMockTest extends AbstractTest {
+class DataElementsRepositoryMockTest extends AbstractTest {
 
   @Autowired private DataElementRepository dataElementRepository;
 

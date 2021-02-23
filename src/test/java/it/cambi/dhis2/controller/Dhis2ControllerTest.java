@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     classes = Dhis2Application.class,
     properties = {"spring.redis.embedded=true"})
 @AutoConfigureMockMvc
-public class Dhis2ControllerTest extends AbstractTest {
+class Dhis2ControllerTest extends AbstractTest {
 
   @Autowired private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;

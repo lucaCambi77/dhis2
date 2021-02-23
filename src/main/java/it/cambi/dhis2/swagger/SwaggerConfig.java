@@ -23,7 +23,7 @@ public class SwaggerConfig {
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-        .apis(RequestHandlerSelectors.basePackage(Dhis2Controller.class.getPackageName()))
+        .apis(RequestHandlerSelectors.basePackage(Dhis2Controller.class.getPackage().getName()))
         .paths(PathSelectors.any())
         .build()
         .securityContexts(Collections.singletonList(securityContext()))
