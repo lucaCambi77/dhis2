@@ -79,7 +79,7 @@ We need to have sonarqube installed [see](https://docs.sonarqube.org/latest/)
 
 After executing test we can create a sonarqube report with
 ```
-./gradlew build jacocoTestReport sonarqube
+./gradlew build jacocoTestReport sonarqube -Dsonar.login=%user% -Dsonar.password=%password%
 ```
 
 In build/sonar we can check results for our task
