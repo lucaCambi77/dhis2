@@ -20,7 +20,8 @@ public class RedisPropertiesConfig {
 
     @Bean(name = "RedisProperties")
     public RedisProperties getRedisProperties() {
-        return RedisProperties.builder().redisHost(redisEmbedded ? "localhost" : redisHost)
+        return RedisProperties.builder()
+                .redisHost(redisEmbedded ? "localhost" : redisHost)
                 .redisPassword(redisPassword)
                 .redisPort(redisEmbedded ? SocketUtils.findAvailableTcpPort() : redisPort).build();
     }
